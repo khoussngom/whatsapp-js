@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./src/style.css">
+    <title>Vite App</title>
+</head>
+
+<body>
+    <div class="flex flex-row w-full h-screen justify-center items-center">
+
+        <div id="option" class="option flex flex-col gap-4 w-1/12 h-full justify-center items-center bg-[#f0f0e8]">
+
+            <div id="Messages" class="boxIc flex flex-col w-[80px] h-[70px] justify-center items-center border-solid border-2 border-amber-500 hover:bg-amber-500 rounded-2xl">
+                <i class='bx  bxs-message'></i>
+                <small>Messages</small>
+            </div>
+
+            <div id="Groupe" class="boxIc flex flex-col w-[80px] h-[70px] justify-center items-center border-solid border-2 border-amber-500   hover:bg-amber-500 rounded-2xl">
+                <i class='bx  bxs-group'></i>
+                <small>Groupe</small>
+            </div>
+
+            <div id="boxIcD" class="boxIc flex flex-col w-[80px] h-[70px] justify-center items-center border-solid border-2 border-amber-500 hover:bg-amber-500 rounded-2xl">
+                <i class='bx  bxs-arrow-s-right'></i>
+                <small>Diffusions</small>
+            </div>
+
+            <div id="boxIcA" class="boxIc flex flex-col w-[80px] h-[70px] justify-center items-center border-solid border-2 border-amber-500 hover:bg-amber-500 rounded-2xl">
+                <i class='bx  bxs-archive-alt'></i>
+                <small>Archives</small>
+            </div>
+
+            <div id="nouveau" class="boxIc flex flex-col w-[80px] h-[70px] justify-center items-center border-solid border-2 border-amber-500 hover:bg-amber-500 rounded-2xl">
+                <i class='bx  bxs-plus'></i>
+                <small>Nouveau</small>
+            </div>
+        </div>
+
+        <div id="messages" class="messages flex flex-col  p-3 w-4/12 h-full justify-start items-start">
+
+            <div class="flex flex-col w-full h-1/12 p-3 justify-start items-start">
+
+                <div>Discussions</div>
+
+                <div class="w-full h-[2px] bg-gray-100 "></div>
+
+                <div class="w-full h-[25px] my-1">
+                    <input type="search" name="" id="recherche" placeholder="Rechercher" class=" bg-white h-full w-full pl-4 py-2 text-l border-2 rounded-xl">
+                </div>
+
+            </div>
+
+            <div id="listMessage" class="flex flex-1 flex-col gap-3 w-full  justify-start items-start">
+
+            </div>
+
+        </div>
+
+        <div id="mess" class="messages flex flex-col bg-[#efe7d7] w-7/12 h-full justify-start items-center mx-1">
+
+            <div id="entetDiscussion" class="flex flex-col w-full h-2/12 border-b-2 border-white">
+                <div class="flex flex-row w-full h-full border-b-2 ">
+
+                    <div class="flex flex-row justify-start items-start w-[70%] h-full">
+                        <div id="pp" class="flex rounded-full bg-gray-700 w-[50px] h-[50px] m-3"></div>
+                        <div id="amis" class="flex flex-row justify-between items-start py-3">
+                            <div class="text-xl text-center mt-3">Khouss ngom</div>
+                        </div>
+                    </div>
+
+                    <div id="action" class="flex flex-row mt-4">
+                        <div class="flex gap-5 mr-3">
+                            <span class="h-10 w-10 border rounded-full border-[#e86709] flex justify-center items-center">
+                          <i class="bx  bxs-backspace  text-xl text-[#e86709]"  ></i> 
+                        </span>
+
+                            <span class="h-10 w-10 border rounded-full border-[#837d73] flex justify-center items-center">
+                          <i class="bx bxs-box font-bold text-xl text-[#837d73]"></i>
+                        </span>
+
+                            <span class="h-10 w-10 border rounded-full border-[#716c5b] flex justify-center items-center">
+                          <i class="bx bxs-square-rounded font-bold text-xl"></i>
+                        </span>
+
+                            <span class="h-10 w-10 border rounded-full border-[#9f070e] flex justify-center items-center">
+                          <i class="bx bxs-trash-alt font-bold text-xl text-[#9f070e]"></i>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col w-full h-[88%] "></div>
+
+            <div class="flex flex-row w-full  h-[7%] bg-white py-1 px-5">
+                <div class="w-[94%] h-[40px] my-1 ">
+                    <input type="search" name="" id="recherche" placeholder="Ecrire" class=" bg-gray-100 h-full  w-full pl-4 py-2 text-l border-2 rounded-2xl">
+                </div>
+
+                <div class=" flex flex-row justify-center items-center w-[5%] ml-[5px] rounded-full bg-green-600 text-white text-2xl">
+                    <i class='bx bxs-arrow-right-stroke'></i>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <script type="module" src="/src/controller/controller.js"></script>
+</body>
+
+</html>

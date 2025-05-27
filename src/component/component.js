@@ -1,0 +1,111 @@
+export const component = (() => ({
+    ajoutContact: () => {
+        const ajout = `
+    <div class="flex flex-col h-[50%] w-[90%] p-4 gap-6 border-2 justify-center items-center rounded-md border-amber-500">
+        <div class="flex flex-col h-[40%] gap-5 w-full">
+            <p>Nom Complet :</p>
+            <input id="nomComplet" class="w-full h-[50%] rounded-2xl p-2 border-2 border-amber-200 hover:border-amber-500 focus:border-amber-500 focus:outline-none" placeholder="cheikh ndiaye khouss ngom">
+        </div>
+
+        <div class="flex flex-col h-[40%] gap-5 w-full">
+            <p>Numéro de Téléphone :</p>
+            <input id="numeroTelephone" class="w-full h-[50%] rounded-2xl p-2 border-2 border-amber-200 hover:border-amber-500 focus:border-amber-500 focus:outline-none" placeholder="77 473 00 39">  
+        </div>
+
+        <button id="enregistrerContact" class="w-full h-[20%] text-white bg-amber-500 rounded-md">Enregistrer</button>
+    </div>
+    `;
+        return ajout;
+    },
+
+    listeMessage: () => {
+        const message = `
+            <div id="listMessage" class="flex flex-1 flex-col gap-3 w-full  justify-start items-start">
+
+                <div id="mes" class="flex flex-row w-full h-[60px] justify-between items-center">
+
+                    <div id="info" class="flex flex-row w-9/12 h-full">
+                        <div id="pp" class="flex rounded-full bg-gray-700 w-[60px] h-[60px] mr-3"></div>
+                        <div id="amis" class="flex flex-col justify-between items-start py-3">
+                            <div class="text-xl">Khouss ngom</div>
+                            <div class="text-xs/[14px]">hello world!</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
+                        <div class="rounded-full w-[4px] h-[4px] bg-green-600"></div>
+                        <div class="text-[12px] text-green-600">actif</div>
+
+                    </div>
+                </div>
+
+                <div id="mes" class="flex flex-row w-full h-[60px] justify-between items-center">
+
+                    <div id="info" class="flex flex-row w-9/12 h-full">
+                        <div id="pp" class="flex rounded-full bg-gray-700 w-[60px] h-[60px] mr-3"></div>
+                        <div id="amis" class="flex flex-col justify-between items-start py-3">
+                            <div class="text-xl">Khouss ngom</div>
+                            <div class="text-xs/[14px]">hello world!</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
+                        <div class="rounded-full w-[4px] h-[4px] bg-green-600"></div>
+                        <div class="text-[12px] text-green-600">actif</div>
+                    </div>
+                </div>
+
+            </div>
+        `;
+        return message
+    },
+
+    listeGroupe: (nomGroupe) => {
+        const groupe = `
+            <div id="listMessage" class="flex flex-1 flex-col gap-3 w-full  justify-start items-start">
+
+                <div id="mes" class="flex flex-row w-full h-[60px] justify-between items-center">
+
+                    <div id="info" class="flex flex-row w-9/12 h-full">
+                        <div id="pp" class="flex rounded-full bg-gray-700 w-[60px] h-[60px] mr-3"></div>
+                        <div id="amis" class="flex flex-col justify-between items-start py-3">
+                            <div class="text-xl">${nomGroupe.nom}</div>
+                            <div class="text-xs/[14px]">hello world!</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
+                        <div class="rounded-full w-[4px] h-[4px] bg-green-600"></div>
+                        <div class="text-[12px] text-green-600">actif</div>
+
+                    </div>
+                </div>
+            </div>
+        `;
+        return groupe
+    },
+    membreGroupe(liste) {
+        const membre = `<small class="text-gray-600 text-[10px]">${liste}</small>`;
+        return membre
+    },
+
+    ajoutGroupe: () => {
+        const ajout = `
+    <div class="flex flex-col h-[60%] w-[90%] p-4 gap-6 border-2 justify-center items-center rounded-md border-amber-500">
+        <div class="flex flex-col h-[30%] gap-5 w-full">
+            <p>Nom du Groupe :</p>
+            <input id="nomGroupe" class="w-full h-[50%] rounded-2xl p-2 border-2 border-amber-200 hover:border-amber-500 focus:border-amber-500 focus:outline-none" placeholder="Ex : Kourel jalibatoul Marakhib">
+        </div>
+
+        <div class="flex flex-col h-[40%] gap-5 w-full">
+            <p>Membres du groupe (séparés par des virgules) :</p>
+            <input id="membresGroupe" class="w-full h-[50%] rounded-2xl p-2 border-2 border-amber-200 hover:border-amber-500 focus:border-amber-500 focus:outline-none" placeholder="Ex : Aliou, Khouss, Awa">
+        </div>
+
+        <button id="enregistrerGroupe" class="w-full h-[20%] text-white bg-amber-500 rounded-md">Enregistrer le Groupe</button>
+    </div>
+    `;
+        return ajout;
+    },
+
+}))();
