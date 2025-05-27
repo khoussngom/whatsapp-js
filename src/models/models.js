@@ -22,6 +22,11 @@ export const models = (() => ({
         groupe = [newGroupe, ...groupe]
     },
 
+    ajoutMembre(groupe, membres) {
+        groupe.membres = membres;
+        return groupe
+    },
+
     listerGroupe() {
         return groupe
     },

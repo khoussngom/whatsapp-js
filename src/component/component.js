@@ -65,12 +65,19 @@ export const component = (() => ({
                     <div class="flex flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
                         <div class="rounded-full w-[4px] h-[4px] bg-green-600"></div>
                         <div class="text-[12px] text-green-600">${dateTime.toLocaleDateString()}</div>
-
                     </div>
+
+                    <div id="addMember" class="text-[32px] text-green-600 mr-5 mb-3">+</div>
+
                 </div>
             </div>
         `;
         return groupe
+    },
+
+    listeContact(contact, id) {
+        const liste = `<li id="c${id}" class="text-[15px] ">${contact.nom}</li>`
+        return liste
     },
 
     membreGroupe(liste) {

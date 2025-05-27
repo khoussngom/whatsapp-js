@@ -68,12 +68,12 @@ const allArchive = function() {
     listeMessages.innerHTML = component.listeMessage();
     const amis = models.listerArchive();
 
-    amis.forEach(element => {
+    amis.forEach((element, id) => {
         const div = document.createElement("div");
-        div.innerHTML = component.message(element);
+        div.innerHTML = component.message(element, id);
         listeMessages.prepend(div);
         const etat = document.querySelector("#etat");
-        etat.innerHTML = "Desarchiver";
+        etat.innerHTML = "<i class='bx  bxs-archive-arrow-up'  style='color:#000000'></i>";
         etat.addEventListener("click", () => {
             models.desarchiverContact(element.nom, amis);
             allMessages()
@@ -111,46 +111,64 @@ const afficherMembre = function(element) {
     if (Array.isArray(allMembers) && allMembers.length > 0) {
         const membresStr = allMembers.join(", ");
 
-        const listMember = document.createElement("div");
-        listMember.innerHTML = "";
-        listMember.innerHTML = component.membreGroupe(membresStr);
-        nomActive.innerHTML = element.nom;
-        enteteDiscu.appendChild(listMember);
+        const ancienDiv = document.querySelector(".list-member");
+        if (ancienDiv) {
+            ancienDiv.remove();
+        }
 
+        const listMember = document.createElement("div");
+        listMember.classList.add("list-member");
+        listMember.innerHTML = component.membreGroupe(membresStr);
+
+        nomActive.innerHTML = element.nom;
+
+        enteteDiscu.appendChild(listMember);
     } else {
         console.warn(`Aucun membre trouvé pour le groupe ${element.nom}`);
     }
 };
 
+
 let groupe = [];
 
 function recupererDonneesGroupe() {
+    const listeContact = models.listerContact();
+    listeContact.push({ nom: "khouss", numero: "774730039" })
     const nom = document.querySelector("#nomGroupe").value.trim();
     const membres = document.querySelector("#membresGroupe").value.trim();
+
     const mem = membres
         .split(",")
         .map(m => m.trim())
         .filter(m => m !== "");
-    mem.push("khouss")
+
+    mem.push("khouss");
 
     if (mem.length < 2) {
-        afficherMessageError("le groupe  doit contenir au moins 2 personnes")
-        return
+        afficherMessageError("Le groupe doit contenir au moins 2 personnes.");
+        return;
     }
 
-    return { nom, membres };
+    for (let el of mem) {
+        const existe = listeContact.find(contact => contact.nom === el);
+        if (!existe) {
+            afficherMessageError(`${el.charAt(0).toUpperCase() + el.slice(1)} n'est pas dans ton contact.`);
+            console.log(`${el} n'est pas dans ton contact.`);
+            return;
+        }
+    }
+
+    return { nom, membres: mem };
 }
+
 
 function construireGroupe({ nom, membres }) {
     if (!nom) return null;
 
     const nouveauGroupe = { nom };
     if (membres) {
-        const membresArray = membres
-            .split(",")
-            .map(m => m.trim())
-            .filter(m => m !== "");
-        membresArray.push("khouss")
+        const membresArray = membres;
+        // membresArray.push("khouss")
         if (membresArray.length > 1) {
             nouveauGroupe.membres = membresArray;
         }
@@ -207,6 +225,30 @@ function creerGroupe() {
     });
 }
 
+const choixMembre = function(groupe) {
+    const contact = models.listerContact();
+    const ul = document.createElement("ul");
+
+    contact.forEach((element, key) => {
+
+        const li = document.createElement("li");
+        li.innerHTML = component.listeContact(element, key);
+        li.addEventListener("click", () => {
+            const membre = li.textContent;
+            console.log(groupe.membres)
+            groupe.membres.push(membre);
+            li.innerHTML = "";
+        })
+        ul.appendChild(li);
+    })
+
+    listeMessages.appendChild(ul);
+}
+const addMembre = function(groupe) {
+
+    const add = document.querySelector("#addMember");
+    add.addEventListener("click", () => { choixMembre(groupe) });
+}
 
 const afMemb = function(groupe) {
     if (groupe.length > 0) {
@@ -215,6 +257,7 @@ const afMemb = function(groupe) {
             div.innerHTML = component.listeGroupe(element);
             listeMessages.appendChild(div);
             div.addEventListener("click", () => afficherMembre(element))
+            addMembre(element);
         });
     }
 }
@@ -226,6 +269,9 @@ const btnAddGroup = function() {
     btnCreer.addEventListener("click", creerGroupe)
 
 }
+
+
+
 
 const afficherListeGroupe = function() {
     listeMessages.innerHTML = "";
