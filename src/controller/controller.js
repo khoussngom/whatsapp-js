@@ -105,6 +105,14 @@ let groupe = [];
 function recupererDonneesGroupe() {
     const nom = document.querySelector("#nomGroupe").value.trim();
     const membres = document.querySelector("#membresGroupe").value.trim();
+    const mem = membres
+        .split(",")
+        .map(m => m.trim())
+        .filter(m => m !== "");
+    if (mem.length < 2) {
+        afficherMessageError("le groupe  doit contenir au moins 2 personnes")
+        return
+    }
     return { nom, membres };
 }
 
@@ -119,7 +127,7 @@ function construireGroupe({ nom, membres }) {
             .map(m => m.trim())
             .filter(m => m !== "");
 
-        if (membresArray.length > 0) {
+        if (membresArray.length > 1) {
             nouveauGroupe.membres = membresArray;
         }
     }
@@ -146,6 +154,13 @@ function afficherMessageSucces(messageTexte) {
     listeMessages.appendChild(message);
 }
 
+function afficherMessageError(messageTexte) {
+    const message = document.createElement("small");
+    message.textContent = messageTexte;
+    message.className = "text-red-600 text-[10px]";
+    listeMessages.appendChild(message);
+}
+
 
 function creerGroupe() {
     listeMessages.innerHTML = component.ajoutGroupe();
@@ -164,6 +179,7 @@ function creerGroupe() {
         ajouterGroupe(nouveauGroupe);
         reinitialiserFormulaireGroupe();
         afficherMessageSucces("Groupe ajouté avec succès.");
+        afficherListeGroupe();
     });
 }
 
