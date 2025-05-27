@@ -11,6 +11,7 @@ const enteteDiscu = document.querySelector("#entetDiscussion");
 const btnArchive = document.querySelector("#archiver");
 const nomActive = document.querySelector("#nomActive");
 const Archive = document.querySelector("#ARCHIVE");
+const profil = document.querySelector("#pp");
 
 const ajouter = function() {
     listeMessages.innerHTML = component.ajoutContact()
@@ -29,6 +30,11 @@ const ajouter = function() {
 
 const afficherContact = function(element) {
     nomActive.innerHTML = element.nom;
+    const span = document.createElement("span");
+    span.innerHTML = `<span class=" flex justify-center items-center text-center ml-3 text-[30px] text-white w-full h-full">${element.nom.charAt(0).toUpperCase()
+}</span>`;
+
+    profil.appendChild(span);
 }
 
 const allMessages = function() {
@@ -42,10 +48,11 @@ const allMessages = function() {
 
         listeMessages.prepend(div);
         const pp = document.querySelector(`#pp${key}`);
-        console.log(pp);
+
 
         const span = document.createElement("span");
-        span.innerHTML = `<span class=" flex justify-center items-center text-center ml-2 text-[30px] text-white w-full h-full">KN</span>`;
+        span.innerHTML = `<span class=" flex justify-center items-center text-center ml-4 text-[30px] text-white w-full h-full">${element.nom.charAt(0).toUpperCase()
+}</span>`;
 
         pp.appendChild(span);
         div.addEventListener("click", () => afficherContact(element));
@@ -105,6 +112,7 @@ const afficherMembre = function(element) {
         const membresStr = allMembers.join(", ");
 
         const listMember = document.createElement("div");
+        listMember.innerHTML = "";
         listMember.innerHTML = component.membreGroupe(membresStr);
         nomActive.innerHTML = element.nom;
         enteteDiscu.appendChild(listMember);
@@ -123,10 +131,13 @@ function recupererDonneesGroupe() {
         .split(",")
         .map(m => m.trim())
         .filter(m => m !== "");
+    mem.push("khouss")
+
     if (mem.length < 2) {
         afficherMessageError("le groupe  doit contenir au moins 2 personnes")
         return
     }
+
     return { nom, membres };
 }
 
@@ -134,13 +145,12 @@ function construireGroupe({ nom, membres }) {
     if (!nom) return null;
 
     const nouveauGroupe = { nom };
-
     if (membres) {
         const membresArray = membres
             .split(",")
             .map(m => m.trim())
             .filter(m => m !== "");
-
+        membresArray.push("khouss")
         if (membresArray.length > 1) {
             nouveauGroupe.membres = membresArray;
         }
