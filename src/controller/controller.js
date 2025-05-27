@@ -17,8 +17,13 @@ const ajouter = function() {
     const btnSaveContact = document.querySelector("#enregistrerContact");
     const nomComplet = document.querySelector("#nomComplet")
     const numeroTelephone = document.querySelector("#numeroTelephone")
+
+
     if (btnSaveContact) {
-        btnSaveContact.addEventListener("click", saveNewContact);
+        btnSaveContact.addEventListener("click", () => {
+
+            saveNewContact()
+        });
     }
 }
 
@@ -217,9 +222,17 @@ const saveNewContact = function() {
     const newContact = {}
     newContact["nom"] = nomComplet.value;
     newContact["numero"] = numeroTelephone.value;
+    const groupe = models.listerContact()
+    console.log(groupe)
+
+    const bool = services.numExiste(groupe, newContact.numero)
+    if (bool) {
+        afficherMessageError("ce numero existe deja !");
+        return
+    }
     const messageSt = models.ajoutContact(newContact);
     const messageStatut = document.createElement("small");
-    messageStatut.innerHTML = messageSt
+    messageStatut.innerHTML = messageSt;
     listeMessages.prepend(messageStatut);
     nomComplet.value = "";
     numeroTelephone.value = "";
