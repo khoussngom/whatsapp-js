@@ -2,6 +2,7 @@ import { services } from "../services/service.js";
 
 let contact = [];
 let groupe = [];
+let archiveContact = [];
 
 export const models = (() => ({
     ajoutContact(newContact) {
@@ -28,6 +29,26 @@ export const models = (() => ({
     listeMembre(nom) {
         const groupeTrouve = groupe.find(element => element.nom === nom);
         return groupeTrouve ? groupeTrouve.membres || [] : [];
-    }
+    },
+
+    archiverContact(nom, groupe) {
+        const contactTrouve = groupe.find(element => element.nom === nom);
+        groupe = groupe.pop(contactTrouve);
+        archiveContact = [contactTrouve, ...archiveContact];
+
+        return archiveContact;
+    },
+
+    listerArchive() {
+        return archiveContact
+    },
+
+    desarchiverContact(nom, archiveContact) {
+        const contactTrouve = archiveContact.find(element => element.nom === nom);
+        archiveContact = archiveContact.pop(contactTrouve);
+        contact = [contactTrouve, ...contact];
+        console.log(contact)
+        return contact;
+    },
 
 }))()

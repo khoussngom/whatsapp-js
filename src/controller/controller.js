@@ -8,7 +8,9 @@ const messages = document.querySelector("#Messages");
 const listeGroupe = document.querySelector("#Groupe");
 const listeMessages = document.querySelector("#listMessage");
 const enteteDiscu = document.querySelector("#entetDiscussion");
-
+const btnArchive = document.querySelector("#archiver");
+const nomActive = document.querySelector("#nomActive");
+const Archive = document.querySelector("#ARCHIVE");
 
 const ajouter = function() {
     listeMessages.innerHTML = component.ajoutContact()
@@ -20,9 +22,49 @@ const ajouter = function() {
     }
 }
 
-const allMessages = function() {
-    listeMessages.innerHTML = component.listeMessage()
+const afficherContact = function(element) {
+    nomActive.innerHTML = element.nom;
 }
+
+const allMessages = function() {
+    listeMessages.innerHTML = component.listeMessage();
+    const amis = models.listerContact();
+
+    amis.forEach(element => {
+        const div = document.createElement("div");
+        div.innerHTML = component.message(element);
+        listeMessages.prepend(div);
+        div.addEventListener("click", () => afficherContact(element));
+        btnArchive.addEventListener("click", () => {
+            models.archiverContact(element.nom, amis);
+            allArchive();
+        });
+
+    });
+}
+
+const allArchive = function() {
+    listeMessages.innerHTML = component.listeMessage();
+    const amis = models.listerArchive();
+
+    amis.forEach(element => {
+        const div = document.createElement("div");
+        div.innerHTML = component.message(element);
+        listeMessages.prepend(div);
+        const etat = document.querySelector("#etat");
+        etat.innerHTML = "Desarchiver";
+        etat.addEventListener("click", () => {
+            models.desarchiverContact(element.nom, amis);
+            allMessages()
+        });
+        div.addEventListener("click", () => {
+            afficherContact(element)
+        });
+        btnArchive.addEventListener("click", () => { models.archiverContact(element.nom, amis) });
+
+    });
+}
+
 
 const afficherAllContact = function() {
     const allContact = models.listerContact();
@@ -31,13 +73,14 @@ const afficherAllContact = function() {
         const li = document.createElement("li");
         li.textContent = `${element.nom}: ${element.numero}`;
         ul.appendChild(li);
+        if (services.isNumValid(element.numero)) {
+            listeMessages.innerHTML = "";
+            listeMessages.appendChild(ul);
+        }
     });
-    if (services.isNumValid(element.numero)) {
-        listeMessages.innerHTML = "";
-        listeMessages.appendChild(ul);
-    }
 
 }
+
 
 
 const afficherMembre = function(element) {
@@ -49,8 +92,9 @@ const afficherMembre = function(element) {
 
         const listMember = document.createElement("div");
         listMember.innerHTML = component.membreGroupe(membresStr);
-
+        nomActive.innerHTML = element.nom;
         enteteDiscu.appendChild(listMember);
+
     } else {
         console.warn(`Aucun membre trouvé pour le groupe ${element.nom}`);
     }
@@ -174,3 +218,5 @@ nouveau.addEventListener("click", ajouter);
 messages.addEventListener("click", allMessages);
 
 listeGroupe.addEventListener("click", afficherListeGroupe)
+
+Archive.addEventListener("click", allArchive)

@@ -21,50 +21,38 @@ export const component = (() => ({
     listeMessage: () => {
         const message = `
             <div id="listMessage" class="flex flex-1 flex-col gap-3 w-full  justify-start items-start">
-
-                <div id="mes" class="flex flex-row w-full h-[60px] justify-between items-center">
-
-                    <div id="info" class="flex flex-row w-9/12 h-full">
-                        <div id="pp" class="flex rounded-full bg-gray-700 w-[60px] h-[60px] mr-3"></div>
-                        <div id="amis" class="flex flex-col justify-between items-start py-3">
-                            <div class="text-xl">Khouss ngom</div>
-                            <div class="text-xs/[14px]">hello world!</div>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
-                        <div class="rounded-full w-[4px] h-[4px] bg-green-600"></div>
-                        <div class="text-[12px] text-green-600">actif</div>
-
-                    </div>
-                </div>
-
-                <div id="mes" class="flex flex-row w-full h-[60px] justify-between items-center">
-
-                    <div id="info" class="flex flex-row w-9/12 h-full">
-                        <div id="pp" class="flex rounded-full bg-gray-700 w-[60px] h-[60px] mr-3"></div>
-                        <div id="amis" class="flex flex-col justify-between items-start py-3">
-                            <div class="text-xl">Khouss ngom</div>
-                            <div class="text-xs/[14px]">hello world!</div>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
-                        <div class="rounded-full w-[4px] h-[4px] bg-green-600"></div>
-                        <div class="text-[12px] text-green-600">actif</div>
-                    </div>
-                </div>
-
             </div>
         `;
         return message
     },
 
-    listeGroupe: (nomGroupe) => {
-        const groupe = `
-            <div id="listMessage" class="flex flex-1 flex-col gap-3 w-full  justify-start items-start">
+    message: (amis) => {
+        const dateTime = new Date();
+        const mes = ` <div id="mes" class="flex flex-row w-[500px] h-[60px] justify-between items-center">
 
-                <div id="mes" class="flex flex-row w-full h-[60px] justify-between items-center">
+                    <div id="info" class="flex flex-row w-9/12 h-full">
+                        <div id="pp" class="flex rounded-full bg-gray-700 w-[60px] h-[60px] mr-3"></div>
+                        <div id="amis" class="flex flex-col justify-between items-start py-3">
+                            <div class="text-xl">${amis.nom}</div>
+                            <div class="text-xs/[14px]">hello world!</div>
+                        </div>
+                    </div>
+
+                    <div id="etat" class="flex flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
+                        <div class="rounded-full w-[4px] h-[4px] bg-green-600"></div>
+                        <div class="text-[12px] text-green-600">${dateTime.toLocaleDateString()}</div>
+
+                    </div>
+                </div>`
+        return mes;
+    },
+
+    listeGroupe: (nomGroupe) => {
+        const dateTime = new Date();
+        const groupe = `
+            <div id="listMessage" class="flex flex-1 flex-col gap-3 w-[150px]  justify-start items-start">
+
+                <div id="mes" class="flex flex-row w-[500px] h-[60px] justify-between items-center">
 
                     <div id="info" class="flex flex-row w-9/12 h-full">
                         <div id="pp" class="flex rounded-full bg-gray-700 w-[60px] h-[60px] mr-3"></div>
@@ -76,7 +64,7 @@ export const component = (() => ({
 
                     <div class="flex flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
                         <div class="rounded-full w-[4px] h-[4px] bg-green-600"></div>
-                        <div class="text-[12px] text-green-600">actif</div>
+                        <div class="text-[12px] text-green-600">${dateTime.toLocaleDateString()}</div>
 
                     </div>
                 </div>
@@ -84,6 +72,7 @@ export const component = (() => ({
         `;
         return groupe
     },
+
     membreGroupe(liste) {
         const membre = `<small class="text-gray-600 text-[10px]">${liste}</small>`;
         return membre
