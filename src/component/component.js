@@ -26,12 +26,12 @@ export const component = (() => ({
         return message
     },
 
-    message: (amis) => {
+    message: (amis, id) => {
         const dateTime = new Date();
         const mes = ` <div id="mes" class="flex flex-row w-[500px] h-[60px] justify-between items-center">
 
                     <div id="info" class="flex flex-row w-9/12 h-full">
-                        <div id="pp" class="flex rounded-full bg-gray-700 w-[60px] h-[60px] mr-3"></div>
+                        <div id="pp${id}" class="flex rounded-full bg-gray-700 w-[60px] h-[60px] mr-3"></div>
                         <div id="amis" class="flex flex-col justify-between items-start py-3">
                             <div class="text-xl">${amis.nom}</div>
                             <div class="text-xs/[14px]">hello world!</div>

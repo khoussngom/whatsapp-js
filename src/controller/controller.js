@@ -21,8 +21,8 @@ const ajouter = function() {
 
     if (btnSaveContact) {
         btnSaveContact.addEventListener("click", () => {
-
             saveNewContact()
+
         });
     }
 }
@@ -35,10 +35,19 @@ const allMessages = function() {
     listeMessages.innerHTML = component.listeMessage();
     const amis = models.listerContact();
 
-    amis.forEach(element => {
+
+    amis.forEach((element, key) => {
         const div = document.createElement("div");
-        div.innerHTML = component.message(element);
+        div.innerHTML = component.message(element, key);
+
         listeMessages.prepend(div);
+        const pp = document.querySelector(`#pp${key}`);
+        console.log(pp);
+
+        const span = document.createElement("span");
+        span.innerHTML = `<span class=" flex justify-center items-center text-center ml-2 text-[30px] text-white w-full h-full">KN</span>`;
+
+        pp.appendChild(span);
         div.addEventListener("click", () => afficherContact(element));
         btnArchive.addEventListener("click", () => {
             models.archiverContact(element.nom, amis);
@@ -222,6 +231,7 @@ const saveNewContact = function() {
     const newContact = {}
     newContact["nom"] = nomComplet.value;
     newContact["numero"] = numeroTelephone.value;
+
     const groupe = models.listerContact()
     console.log(groupe)
 
