@@ -82,7 +82,7 @@ const allMessages = function() {
 
         btnArchive.addEventListener("click", () => {
             models.archiverContact(element.nom, amis);
-            // allArchive();
+            allArchive();
         });
 
     });
