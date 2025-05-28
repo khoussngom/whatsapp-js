@@ -3,4 +3,5 @@
 @tailwind utilities;
 .selectionner {
     background-color: gray;
+    opacity: 0.8;
 }

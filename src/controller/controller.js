@@ -82,7 +82,7 @@ const allMessages = function() {
 
         btnArchive.addEventListener("click", () => {
             models.archiverContact(element.nom, amis);
-            allArchive();
+            // allArchive();
         });
 
     });
@@ -216,14 +216,14 @@ function reinitialiserFormulaireGroupe() {
 function afficherMessageSucces(messageTexte) {
     const message = document.createElement("small");
     message.textContent = messageTexte;
-    message.className = "text-green-600 text-[10px]";
+    message.className = "text-green-600 text-[14px]";
     listeMessages.appendChild(message);
 }
 
 function afficherMessageError(messageTexte) {
     const message = document.createElement("small");
     message.textContent = messageTexte;
-    message.className = "text-red-600 text-[10px]";
+    message.className = "text-red-600 text-[14px]";
     listeMessages.appendChild(message);
 }
 
