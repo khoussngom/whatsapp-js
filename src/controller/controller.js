@@ -29,13 +29,22 @@ const ajouter = function() {
 }
 
 const afficherContact = function(element) {
+
     nomActive.innerHTML = element.nom;
+
+    profil.innerHTML = "";
+
     const span = document.createElement("span");
-    span.innerHTML = `<span class=" flex justify-center items-center text-center ml-3 text-[30px] text-white w-full h-full">${element.nom.charAt(0).toUpperCase()
-}</span>`;
+    span.classList.add(
+        "flex", "flex-row", "rounded-full",
+        "w-[40px]", "h-[40px]", "justify-center", "items-center"
+    );
+    span.innerHTML = `<span class=" flex flex-row justify-center items-center text-cente text-[30px] text-white w-full h-full">${element.nom.charAt(0).toUpperCase()}
+                        </span>`;
 
     profil.appendChild(span);
-}
+};
+
 
 const allMessages = function() {
     listeMessages.innerHTML = component.listeMessage();
@@ -51,11 +60,26 @@ const allMessages = function() {
 
 
         const span = document.createElement("span");
-        span.innerHTML = `<span class=" flex justify-center items-center text-center ml-4 text-[30px] text-white w-full h-full">${element.nom.charAt(0).toUpperCase()
+        span.classList.add(
+            "flex", "flex-row", "rounded-full",
+            "w-[40px]", "h-[40px]", "justify-center", "items-center"
+        );
+        span.innerHTML = `<span class=" flex flex-row justify-center items-center text-cente text-[30px] text-white w-full h-full">${element.nom.charAt(0).toUpperCase()
 }</span>`;
 
         pp.appendChild(span);
-        div.addEventListener("click", () => afficherContact(element));
+
+        div.addEventListener("click", () => {
+            afficherContact(element);
+
+            document.querySelectorAll(".selectionner").forEach(el => {
+                el.classList.remove("selectionner");
+            });
+
+            div.classList.add("selectionner");
+        });
+
+
         btnArchive.addEventListener("click", () => {
             models.archiverContact(element.nom, amis);
             allArchive();
@@ -106,7 +130,7 @@ const afficherAllContact = function() {
 
 const afficherMembre = function(element) {
     const allMembers = models.listeMembre(element.nom);
-    console.log(allMembers);
+    // console.log(allMembers);
 
     if (Array.isArray(allMembers) && allMembers.length > 0) {
         const membresStr = allMembers.join(", ");
