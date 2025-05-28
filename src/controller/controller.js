@@ -127,26 +127,28 @@ const afficherAllContact = function() {
 }
 
 
+const creer_listMembre = function(membresStr) {
+    const listMember = document.createElement("div");
+    listMember.classList.add("list-member");
+    listMember.innerHTML = component.membreGroupe(membresStr);
+
+    nomActive.innerHTML = element.nom;
+
+    enteteDiscu.appendChild(listMember);
+}
 
 const afficherMembre = function(element) {
     const allMembers = models.listeMembre(element.nom);
-    // console.log(allMembers);
 
     if (Array.isArray(allMembers) && allMembers.length > 0) {
-        const membresStr = allMembers.join(", ");
 
+        const membresStr = allMembers.join(", ");
         const ancienDiv = document.querySelector(".list-member");
+
         if (ancienDiv) {
             ancienDiv.remove();
         }
-
-        const listMember = document.createElement("div");
-        listMember.classList.add("list-member");
-        listMember.innerHTML = component.membreGroupe(membresStr);
-
-        nomActive.innerHTML = element.nom;
-
-        enteteDiscu.appendChild(listMember);
+        creer_listMembre(membresStr);
     } else {
         console.warn(`Aucun membre trouvé pour le groupe ${element.nom}`);
     }
@@ -155,24 +157,19 @@ const afficherMembre = function(element) {
 
 let groupe = [];
 
-function recupererDonneesGroupe() {
-    const listeContact = models.listerContact();
-    listeContact.push({ nom: "khouss", numero: "774730039" })
-    const nom = document.querySelector("#nomGroupe").value.trim();
-    const membres = document.querySelector("#membresGroupe").value.trim();
 
+const user_to_tab = function(membres) {
     const mem = membres
         .split(",")
         .map(m => m.trim())
         .filter(m => m !== "");
 
     mem.push("khouss");
+    return mem;
+}
 
-    if (mem.length < 2) {
-        afficherMessageError("Le groupe doit contenir au moins 2 personnes.");
-        return;
-    }
 
+const verifier_numero_inContact = function(listeContact, mem) {
     for (let el of mem) {
         const existe = listeContact.find(contact => contact.nom === el);
         if (!existe) {
@@ -181,6 +178,22 @@ function recupererDonneesGroupe() {
             return;
         }
     }
+}
+
+function recupererDonneesGroupe() {
+    const listeContact = models.listerContact();
+    listeContact.push({ nom: "khouss", numero: "774730039" })
+    const nom = document.querySelector("#nomGroupe").value.trim();
+    const membres = document.querySelector("#membresGroupe").value.trim();
+
+    const mem = user_to_tab(membres)
+
+    if (mem.length < 2) {
+        afficherMessageError("Le groupe doit contenir au moins 2 personnes.");
+        return;
+    }
+
+    verifier_numero_inContact(listeContact, mem);
 
     return { nom, membres: mem };
 }
@@ -192,7 +205,7 @@ function construireGroupe({ nom, membres }) {
     const nouveauGroupe = { nom };
     if (membres) {
         const membresArray = membres;
-        // membresArray.push("khouss")
+
         if (membresArray.length > 1) {
             nouveauGroupe.membres = membresArray;
         }
@@ -200,6 +213,7 @@ function construireGroupe({ nom, membres }) {
 
     return nouveauGroupe;
 }
+
 
 function ajouterGroupe(nouveauGroupe) {
     models.ajoutGroupe(nouveauGroupe);
@@ -249,25 +263,38 @@ function creerGroupe() {
     });
 }
 
-const choixMembre = function(groupe) {
-    const contact = models.listerContact();
-    const ul = document.createElement("ul");
 
+
+const add_li_contact = function(li) {
+    const membre = li.textContent;
+    console.log(groupe.membres)
+    groupe.membres.push(membre);
+    li.innerHTML = "";
+}
+
+
+
+const parcourir_contact = function(contact) {
     contact.forEach((element, key) => {
-
         const li = document.createElement("li");
         li.innerHTML = component.listeContact(element, key);
         li.addEventListener("click", () => {
-            const membre = li.textContent;
-            console.log(groupe.membres)
-            groupe.membres.push(membre);
-            li.innerHTML = "";
+            add_li_contact(li);
         })
         ul.appendChild(li);
     })
+}
 
+
+
+const choixMembre = function(groupe) {
+    const contact = models.listerContact();
+    const ul = document.createElement("ul");
+    parcourir_contact(contact);
     listeMessages.appendChild(ul);
 }
+
+
 const addMembre = function(groupe) {
 
     const add = document.querySelector("#addMember");
@@ -285,6 +312,8 @@ const afMemb = function(groupe) {
         });
     }
 }
+
+
 
 const btnAddGroup = function() {
     const btnCreer = document.createElement("div")
@@ -307,6 +336,17 @@ const afficherListeGroupe = function() {
 };
 
 
+const afficherMessage = function(newContact) {
+    const messageSt = models.ajoutContact(newContact);
+    const messageStatut = document.createElement("small");
+    messageStatut.innerHTML = messageSt;
+    listeMessages.prepend(messageStatut);
+    nomComplet.value = "";
+    numeroTelephone.value = "";
+    afficherAllContact();
+}
+
+
 const saveNewContact = function() {
     const newContact = {}
     newContact["nom"] = nomComplet.value;
@@ -320,13 +360,8 @@ const saveNewContact = function() {
         afficherMessageError("ce numero existe deja !");
         return
     }
-    const messageSt = models.ajoutContact(newContact);
-    const messageStatut = document.createElement("small");
-    messageStatut.innerHTML = messageSt;
-    listeMessages.prepend(messageStatut);
-    nomComplet.value = "";
-    numeroTelephone.value = "";
-    afficherAllContact();
+
+    afficherMessage(newContact);
 }
 
 
