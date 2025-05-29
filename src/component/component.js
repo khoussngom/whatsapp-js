@@ -26,6 +26,13 @@ export const component = (() => ({
         return message
     },
 
+    messageEnvoyer: () => {
+        const message = `<div id="expediteur" class="flex flex-row justify-end items-end w-[98%] h-max ">
+                            <span id="messageEnvoyer" class=" flex flex-row justify-end items-end  w-max  rounded-xl rounded-l-xl  m-3 p-3 h-min text-white bg-green-600 "></span>
+                        </div>`
+        return message
+    },
+
     message: (amis, id) => {
         const dateTime = new Date();
         const mes = ` <div id="mes" class="flex flex-row w-[500px] h-[60px] justify-between items-center">

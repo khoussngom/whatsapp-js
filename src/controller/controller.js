@@ -12,6 +12,11 @@ const btnArchive = document.querySelector("#archiver");
 const nomActive = document.querySelector("#nomActive");
 const Archive = document.querySelector("#ARCHIVE");
 const profil = document.querySelector("#pp");
+const textMessage = document.querySelector("#textMessage");
+const btEnvoie = document.querySelector("#btnEnvoie")
+const expedition = document.querySelector("#expediteur")
+const reception = document.querySelector("#recepteur")
+const zoneMessage = document.querySelector("#zoneMessage")
 
 const ajouter = function() {
     listeMessages.innerHTML = component.ajoutContact()
@@ -28,28 +33,76 @@ const ajouter = function() {
     }
 }
 
+const recupererMessage = function() {
+    const messSend = textMessage.value
+    textMessage.value = ""
+    return messSend
+}
+
+const EnvoyerMessage = function(messSend) {
+    const span = document.createElement("span");
+    span.className = `flex flex-row justify-end items-end  w-max  rounded-xl rounded-l-xl  m-3 p-3 h-min text-white bg-green-600`;
+    span.textContent = messSend;
+    return span
+
+}
+
+const voirMessage = function(span, element) {
+    if (!Array.isArray(element.message)) {
+        element.message = [];
+    }
+
+    element.message = [...element.message, span];
+
+    const tabMessage = element.message;
+    tabMessage.forEach(message => expedition.appendChild(message))
+}
+
+
+let contactActif = null;
+
+
 const afficherContact = function(element) {
+    contactActif = element;
 
     nomActive.innerHTML = element.nom;
-
     profil.innerHTML = "";
+    expedition.innerHTML = "";
+    reception.innerHTML = ""
+
+    if (element.messages) {
+        element.messages.forEach(message => expedition.appendChild(message));
+    }
 
     const span = document.createElement("span");
-    span.classList.add(
-        "flex", "flex-row", "rounded-full",
-        "w-[40px]", "h-[40px]", "justify-center", "items-center"
-    );
-    span.innerHTML = `<span class=" flex flex-row justify-center items-center text-cente text-[30px] text-white w-full h-full">${element.nom.charAt(0).toUpperCase()}
-                        </span>`;
-
+    span.classList.add("flex", "flex-row", "rounded-full", "w-[40px]", "h-[40px]", "justify-center", "items-center");
+    span.innerHTML = `<span class="flex flex-row justify-center items-center text-center text-[30px] text-white w-full h-full">${element.nom.charAt(0).toUpperCase()}</span>`;
     profil.appendChild(span);
 };
 
 
+
+const colorierElemnt = function(div, element) {
+
+    div.addEventListener("click", () => {
+        afficherContact(element);
+
+        document.querySelectorAll(".selectionner").forEach(el => {
+            el.classList.remove("selectionner");
+
+        });
+
+        div.classList.add("selectionner");
+        const tabMessage = element.message;
+        tabMessage.forEach(message => zoneMessage.appendChild(message))
+    });
+
+
+}
+
 const allMessages = function() {
     listeMessages.innerHTML = component.listeMessage();
     const amis = models.listerContact();
-
 
     amis.forEach((element, key) => {
         const div = document.createElement("div");
@@ -58,26 +111,24 @@ const allMessages = function() {
         listeMessages.prepend(div);
         const pp = document.querySelector(`#pp${key}`);
 
-
         const span = document.createElement("span");
-        span.classList.add(
-            "flex", "flex-row", "rounded-full",
-            "w-[40px]", "h-[40px]", "justify-center", "items-center"
-        );
+        span.classList.add("flex", "flex-row", "rounded-full", "w-[40px]", "h-[40px]", "justify-center", "items-center");
         span.innerHTML = `<span class=" flex flex-row justify-center items-center text-cente text-[30px] text-white w-full h-full">${element.nom.charAt(0).toUpperCase()
-}</span>`;
+        }</span>`;
 
         pp.appendChild(span);
 
-        div.addEventListener("click", () => {
-            afficherContact(element);
+        colorierElemnt(div, element);
 
-            document.querySelectorAll(".selectionner").forEach(el => {
-                el.classList.remove("selectionner");
-            });
-
-            div.classList.add("selectionner");
+        btEnvoie.addEventListener("click", () => {
+            if (!contactActif) return;
+            const message = recupererMessage();
+            if (message) {
+                const span = EnvoyerMessage(message);
+                voirMessage(span, contactActif);
+            }
         });
+
 
 
         btnArchive.addEventListener("click", () => {
@@ -122,12 +173,13 @@ const afficherAllContact = function() {
             listeMessages.innerHTML = "";
             listeMessages.appendChild(ul);
         }
+
     });
 
 }
 
 
-const creer_listMembre = function(membresStr) {
+const creer_listMembre = function(membresStr, element) {
     const listMember = document.createElement("div");
     listMember.classList.add("list-member");
     listMember.innerHTML = component.membreGroupe(membresStr);
@@ -139,6 +191,16 @@ const creer_listMembre = function(membresStr) {
 
 const afficherMembre = function(element) {
     const allMembers = models.listeMembre(element.nom);
+    contactActif = element;
+
+    nomActive.innerHTML = element.nom;
+    profil.innerHTML = "";
+    expedition.innerHTML = "";
+    reception.innerHTML = ""
+
+    if (element.messages) {
+        element.messages.forEach(message => expedition.appendChild(message));
+    }
 
     if (Array.isArray(allMembers) && allMembers.length > 0) {
 
@@ -148,7 +210,7 @@ const afficherMembre = function(element) {
         if (ancienDiv) {
             ancienDiv.remove();
         }
-        creer_listMembre(membresStr);
+        creer_listMembre(membresStr, element);
     } else {
         console.warn(`Aucun membre trouvé pour le groupe ${element.nom}`);
     }
@@ -175,7 +237,7 @@ const verifier_numero_inContact = function(listeContact, mem) {
         if (!existe) {
             afficherMessageError(`${el.charAt(0).toUpperCase() + el.slice(1)} n'est pas dans ton contact.`);
             console.log(`${el} n'est pas dans ton contact.`);
-            return;
+            return true;
         }
     }
 }
@@ -193,26 +255,28 @@ function recupererDonneesGroupe() {
         return;
     }
 
-    verifier_numero_inContact(listeContact, mem);
+    if (verifier_numero_inContact(listeContact, mem)) return;
 
     return { nom, membres: mem };
 }
 
 
-function construireGroupe({ nom, membres }) {
+function construireGroupe(data) {
+    if (!data || typeof data !== 'object') return null;
+
+    const { nom, membres = [] } = data;
+
     if (!nom) return null;
 
     const nouveauGroupe = { nom };
-    if (membres) {
-        const membresArray = membres;
 
-        if (membresArray.length > 1) {
-            nouveauGroupe.membres = membresArray;
-        }
+    if (Array.isArray(membres) && membres.length > 1) {
+        nouveauGroupe.membres = membres;
     }
 
     return nouveauGroupe;
 }
+
 
 
 function ajouterGroupe(nouveauGroupe) {
@@ -258,6 +322,14 @@ function creerGroupe() {
 
         ajouterGroupe(nouveauGroupe);
         reinitialiserFormulaireGroupe();
+        btEnvoie.addEventListener("click", () => {
+            if (!contactActif) return;
+            const message = recupererMessage();
+            if (message) {
+                const span = EnvoyerMessage(message);
+                voirMessage(span, contactActif);
+            }
+        });
         afficherMessageSucces("Groupe ajouté avec succès.");
         afficherListeGroupe();
     });
@@ -265,7 +337,7 @@ function creerGroupe() {
 
 
 
-const add_li_contact = function(li) {
+const add_li_contact = function(li, groupe) {
     const membre = li.textContent;
     console.log(groupe.membres)
     groupe.membres.push(membre);
@@ -274,12 +346,12 @@ const add_li_contact = function(li) {
 
 
 
-const parcourir_contact = function(contact) {
+const parcourir_contact = function(contact, ul, groupe) {
     contact.forEach((element, key) => {
         const li = document.createElement("li");
         li.innerHTML = component.listeContact(element, key);
         li.addEventListener("click", () => {
-            add_li_contact(li);
+            add_li_contact(li, groupe);
         })
         ul.appendChild(li);
     })
@@ -290,7 +362,7 @@ const parcourir_contact = function(contact) {
 const choixMembre = function(groupe) {
     const contact = models.listerContact();
     const ul = document.createElement("ul");
-    parcourir_contact(contact);
+    parcourir_contact(contact, ul, groupe);
     listeMessages.appendChild(ul);
 }
 
@@ -341,6 +413,7 @@ const afficherMessage = function(newContact) {
     const messageStatut = document.createElement("small");
     messageStatut.innerHTML = messageSt;
     listeMessages.prepend(messageStatut);
+
     nomComplet.value = "";
     numeroTelephone.value = "";
     afficherAllContact();
