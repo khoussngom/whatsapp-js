@@ -322,6 +322,7 @@ function creerGroupe() {
 
         ajouterGroupe(nouveauGroupe);
         reinitialiserFormulaireGroupe();
+
         btEnvoie.addEventListener("click", () => {
             if (!contactActif) return;
             const message = recupererMessage();
@@ -374,16 +375,33 @@ const addMembre = function(groupe) {
 }
 
 const afMemb = function(groupe) {
-    if (groupe.length > 0) {
-        groupe.forEach(element => {
-            const div = document.createElement("div");
-            div.innerHTML = component.listeGroupe(element);
-            listeMessages.appendChild(div);
-            div.addEventListener("click", () => afficherMembre(element))
-            addMembre(element);
+    if (!Array.isArray(groupe) || groupe.length === 0) return;
+
+    groupe.forEach(element => {
+        const div = document.createElement("div");
+        div.innerHTML = component.listeGroupe(element);
+        listeMessages.appendChild(div);
+
+        div.addEventListener("click", () => {
+            afficherMembre(element);
+            contactActif = element;
+
+            nomActive.innerHTML = element.nom;
+            profil.innerHTML = "";
+            expedition.innerHTML = "";
+            reception.innerHTML = "";
+
+            console.log("oui", element);
+
+            if (Array.isArray(element.message)) {
+                element.message.forEach(message => expedition.appendChild(message));
+            }
         });
-    }
-}
+
+        addMembre(element);
+        console.log(element);
+    });
+};
 
 
 
