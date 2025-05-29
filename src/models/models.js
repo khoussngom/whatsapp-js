@@ -56,4 +56,16 @@ export const models = (() => ({
         return contact;
     },
 
+    rechercherContact(contactList, cle) {
+        if (!cle || cle === "*") return contactList;
+
+        return contactList.filter(element =>
+
+            element.nom.toLowerCase().includes(cle) ||
+            element.numero.toLowerCase().includes(cle)
+        );
+    }
+
+
+
 }))()

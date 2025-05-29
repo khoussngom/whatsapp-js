@@ -13,10 +13,11 @@ const nomActive = document.querySelector("#nomActive");
 const Archive = document.querySelector("#ARCHIVE");
 const profil = document.querySelector("#pp");
 const textMessage = document.querySelector("#textMessage");
-export const btEnvoie = document.querySelector("#btnEnvoie")
-const expedition = document.querySelector("#expediteur")
-const reception = document.querySelector("#recepteur")
-const zoneMessage = document.querySelector("#zoneMessage")
+export const btEnvoie = document.querySelector("#btnEnvoie");
+const expedition = document.querySelector("#expediteur");
+const reception = document.querySelector("#recepteur");
+const zoneMessage = document.querySelector("#zoneMessage");
+const recherche = document.querySelector("#recherche")
 
 diff();
 
@@ -42,6 +43,8 @@ const handleMessage = () => {
         }
     }
 };
+
+
 
 const ajouter = function() {
     listeMessages.innerHTML = component.ajoutContact()
@@ -122,13 +125,38 @@ const colorierElemnt = function(div, element) {
 
 }
 
+let valFiltre = [];
+
+
+
+
+recherche.addEventListener("keyup", () => {
+    const contacts = models.listerContact();
+    const cle = recherche.value.trim().toLowerCase();
+
+    if (cle === '') {
+        valFiltre = [];
+        allMessages();
+        return;
+    }
+
+    valFiltre = models.rechercherContact(contacts, cle);
+    if (valFiltre.length < 1) {
+        listeMessages.innerHTML = "pas de contact avec ce nom ou ce numero !";
+        return;
+    }
+    allMessages();
+});
+
 const allMessages = function() {
     listeMessages.innerHTML = component.listeMessage();
-    const amis = models.listerContact();
 
-    if (amis.length < 1) {
-        listeMessages.innerHTML = "pas de contact disponible !"
-        return
+    const amis = valFiltre.length > 0 ? valFiltre : models.listerContact();
+
+
+    if (!amis || amis.length < 1) {
+        listeMessages.innerHTML = "pas de contact disponible !";
+        return;
     }
 
     amis.forEach((element, key) => {
