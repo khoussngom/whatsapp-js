@@ -1,7 +1,7 @@
 import { component } from "../component/component.js";
 import { services } from "../services/service.js";
 import { models } from "../models/models.js";
-import { list } from "postcss";
+import { diff, isDiffusionMode, Allcheck } from "./message.js";
 
 const nouveau = document.querySelector("#nouveau");
 const messages = document.querySelector("#Messages");
@@ -13,10 +13,35 @@ const nomActive = document.querySelector("#nomActive");
 const Archive = document.querySelector("#ARCHIVE");
 const profil = document.querySelector("#pp");
 const textMessage = document.querySelector("#textMessage");
-const btEnvoie = document.querySelector("#btnEnvoie")
+export const btEnvoie = document.querySelector("#btnEnvoie")
 const expedition = document.querySelector("#expediteur")
 const reception = document.querySelector("#recepteur")
 const zoneMessage = document.querySelector("#zoneMessage")
+
+diff();
+
+const handleMessage = () => {
+    const message = recupererMessage();
+    if (message && message.trim() !== "") {
+        if (isDiffusionMode && Allcheck.length > 0) {
+
+            Allcheck.forEach(element => {
+                const span = EnvoyerMessage(message);
+                expedition.appendChild(span);
+                if (!element.messages) {
+                    element.messages = [];
+                }
+                element.messages.push(span);
+            });
+
+            Allcheck.length = 0;
+        } else if (contactActif) {
+
+            const span = EnvoyerMessage(message);
+            voirMessage(span, contactActif);
+        }
+    }
+};
 
 const ajouter = function() {
     listeMessages.innerHTML = component.ajoutContact()
@@ -33,13 +58,13 @@ const ajouter = function() {
     }
 }
 
-const recupererMessage = function() {
+export const recupererMessage = function() {
     const messSend = textMessage.value
     textMessage.value = ""
     return messSend
 }
 
-const EnvoyerMessage = function(messSend) {
+export const EnvoyerMessage = function(messSend) {
     const span = document.createElement("span");
     span.className = `flex flex-row justify-end items-end  w-max  rounded-xl rounded-l-xl  m-3 p-3 h-min text-white bg-green-600`;
     span.textContent = messSend;
@@ -47,7 +72,7 @@ const EnvoyerMessage = function(messSend) {
 
 }
 
-const voirMessage = function(span, element) {
+export const voirMessage = function(span, element) {
     if (!Array.isArray(element.message)) {
         element.message = [];
     }
@@ -60,7 +85,6 @@ const voirMessage = function(span, element) {
 
 
 let contactActif = null;
-
 
 const afficherContact = function(element) {
     contactActif = element;
@@ -79,8 +103,6 @@ const afficherContact = function(element) {
     span.innerHTML = `<span class="flex flex-row justify-center items-center text-center text-[30px] text-white w-full h-full">${element.nom.charAt(0).toUpperCase()}</span>`;
     profil.appendChild(span);
 };
-
-
 
 const colorierElemnt = function(div, element) {
 
@@ -104,6 +126,11 @@ const allMessages = function() {
     listeMessages.innerHTML = component.listeMessage();
     const amis = models.listerContact();
 
+    if (amis.length < 1) {
+        listeMessages.innerHTML = "pas de contact disponible !"
+        return
+    }
+
     amis.forEach((element, key) => {
         const div = document.createElement("div");
         div.innerHTML = component.message(element, key);
@@ -119,22 +146,6 @@ const allMessages = function() {
         pp.appendChild(span);
 
         colorierElemnt(div, element);
-
-        btEnvoie.addEventListener("click", () => {
-            if (!contactActif) return;
-            const message = recupererMessage();
-            if (message) {
-                const span = EnvoyerMessage(message);
-                voirMessage(span, contactActif);
-            }
-        });
-
-
-
-        btnArchive.addEventListener("click", () => {
-            models.archiverContact(element.nom, amis);
-            allArchive();
-        });
 
     });
 }
@@ -161,7 +172,6 @@ const allArchive = function() {
     });
 }
 
-
 const afficherAllContact = function() {
     const allContact = models.listerContact();
     const ul = document.createElement("ul");
@@ -177,7 +187,6 @@ const afficherAllContact = function() {
     });
 
 }
-
 
 const creer_listMembre = function(membresStr, element) {
     const listMember = document.createElement("div");
@@ -219,7 +228,6 @@ const afficherMembre = function(element) {
 
 let groupe = [];
 
-
 const user_to_tab = function(membres) {
     const mem = membres
         .split(",")
@@ -229,7 +237,6 @@ const user_to_tab = function(membres) {
     mem.push("khouss");
     return mem;
 }
-
 
 const verifier_numero_inContact = function(listeContact, mem) {
     for (let el of mem) {
@@ -260,7 +267,6 @@ function recupererDonneesGroupe() {
     return { nom, membres: mem };
 }
 
-
 function construireGroupe(data) {
     if (!data || typeof data !== 'object') return null;
 
@@ -277,19 +283,15 @@ function construireGroupe(data) {
     return nouveauGroupe;
 }
 
-
-
 function ajouterGroupe(nouveauGroupe) {
     models.ajoutGroupe(nouveauGroupe);
 
 }
 
-
 function reinitialiserFormulaireGroupe() {
     document.querySelector("#nomGroupe").value = "";
     document.querySelector("#membresGroupe").value = "";
 }
-
 
 function afficherMessageSucces(messageTexte) {
     const message = document.createElement("small");
@@ -304,7 +306,6 @@ function afficherMessageError(messageTexte) {
     message.className = "text-red-600 text-[14px]";
     listeMessages.appendChild(message);
 }
-
 
 function creerGroupe() {
     listeMessages.innerHTML = component.ajoutGroupe();
@@ -323,20 +324,10 @@ function creerGroupe() {
         ajouterGroupe(nouveauGroupe);
         reinitialiserFormulaireGroupe();
 
-        btEnvoie.addEventListener("click", () => {
-            if (!contactActif) return;
-            const message = recupererMessage();
-            if (message) {
-                const span = EnvoyerMessage(message);
-                voirMessage(span, contactActif);
-            }
-        });
         afficherMessageSucces("Groupe ajouté avec succès.");
         afficherListeGroupe();
     });
 }
-
-
 
 const add_li_contact = function(li, groupe) {
     const membre = li.textContent;
@@ -344,8 +335,6 @@ const add_li_contact = function(li, groupe) {
     groupe.membres.push(membre);
     li.innerHTML = "";
 }
-
-
 
 const parcourir_contact = function(contact, ul, groupe) {
     contact.forEach((element, key) => {
@@ -358,15 +347,12 @@ const parcourir_contact = function(contact, ul, groupe) {
     })
 }
 
-
-
 const choixMembre = function(groupe) {
     const contact = models.listerContact();
     const ul = document.createElement("ul");
     parcourir_contact(contact, ul, groupe);
     listeMessages.appendChild(ul);
 }
-
 
 const addMembre = function(groupe) {
 
@@ -403,8 +389,6 @@ const afMemb = function(groupe) {
     });
 };
 
-
-
 const btnAddGroup = function() {
     const btnCreer = document.createElement("div")
     btnCreer.innerHTML = `<div class="flex w-[150px] h-[40px] justify-center items-center bg-yellow-500"> creer groupe </div>`
@@ -412,9 +396,6 @@ const btnAddGroup = function() {
     btnCreer.addEventListener("click", creerGroupe)
 
 }
-
-
-
 
 const afficherListeGroupe = function() {
     listeMessages.innerHTML = "";
@@ -424,7 +405,6 @@ const afficherListeGroupe = function() {
     btnAddGroup()
 
 };
-
 
 const afficherMessage = function(newContact) {
     const messageSt = models.ajoutContact(newContact);
@@ -437,7 +417,6 @@ const afficherMessage = function(newContact) {
     afficherAllContact();
 }
 
-
 const saveNewContact = function() {
     const newContact = {}
     newContact["nom"] = nomComplet.value;
@@ -445,18 +424,8 @@ const saveNewContact = function() {
 
     const groupe = models.listerContact()
     console.log(groupe)
-
-    const bool = services.numExiste(groupe, newContact.numero)
-    if (bool) {
-        afficherMessageError("ce numero existe deja !");
-        return
-    }
-
     afficherMessage(newContact);
 }
-
-
-
 
 nouveau.addEventListener("click", ajouter);
 
@@ -465,3 +434,12 @@ messages.addEventListener("click", allMessages);
 listeGroupe.addEventListener("click", afficherListeGroupe)
 
 Archive.addEventListener("click", allArchive)
+
+btEnvoie.addEventListener("click", handleMessage);
+messages.addEventListener("click", allMessages);
+
+listeGroupe.addEventListener("click", afficherListeGroupe)
+
+Archive.addEventListener("click", allArchive)
+
+btEnvoie.addEventListener("click", handleMessage);

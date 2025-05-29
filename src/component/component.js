@@ -54,6 +54,28 @@ export const component = (() => ({
         return mes;
     },
 
+    listeDiffusion: (ami, id) => {
+        const dateTime = new Date();
+        return `<div id="listMessage" class="flex flex-1 flex-col gap-3 w-[150px] justify-start items-start">
+        <div id="mes" class="flex flex-row w-[500px] h-[60px] justify-between items-center">
+            <div id="info" class="flex flex-row w-9/12 h-full">
+                <div id="pp${id}" class="flex rounded-full bg-gray-700 w-[60px] h-[60px] mr-3"></div>
+                <div id="amis" class="flex flex-col justify-between items-start py-3">
+                    <div class="text-xl">${ami.nom}</div>
+                    <div class="text-xs/[14px]">${ami.numero}</div>
+                </div>
+            </div>
+            <div class="flex flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
+                <div class="rounded-full w-[4px] h-[4px] bg-green-600"></div>
+                <div class="text-[12px] text-green-600">${dateTime.toLocaleDateString()}</div>
+            </div>
+            <input id="addMember${id}" type="checkbox">
+        </div>
+    </div>`;
+    },
+
+
+
     listeGroupe: (nomGroupe) => {
         const dateTime = new Date();
         const groupe = `
