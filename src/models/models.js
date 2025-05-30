@@ -57,15 +57,14 @@ export const models = (() => ({
     },
 
     rechercherContact(contactList, cle) {
-        if (!cle || cle === "*") return contactList;
+        if (!cle || cle === "*") {
+            return contactList.sort((a, b) => a.nom.localeCompare(b.nom));
+        }
 
         return contactList.filter(element =>
-
             element.nom.toLowerCase().includes(cle) ||
             element.numero.toLowerCase().includes(cle)
         );
     }
-
-
 
 }))()

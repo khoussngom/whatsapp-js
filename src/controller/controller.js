@@ -135,13 +135,8 @@ recherche.addEventListener("keyup", () => {
     const contacts = models.listerContact();
     const cle = recherche.value.trim().toLowerCase();
 
-    if (cle === '') {
-        valFiltre = [];
-        allMessages();
-        return;
-    }
+    valFiltre = models.rechercherContact(contacts, cle === '' ? '*' : cle);
 
-    valFiltre = models.rechercherContact(contacts, cle);
     if (valFiltre.length < 1) {
         listeMessages.innerHTML = "pas de contact avec ce nom ou ce numero !";
         return;
@@ -149,22 +144,22 @@ recherche.addEventListener("keyup", () => {
     allMessages();
 });
 
+
 const allMessages = function() {
     listeMessages.innerHTML = component.listeMessage();
 
-    const amis = valFiltre.length > 0 ? valFiltre : models.listerContact();
-
+    const amis = (valFiltre.length < 1) ? models.listerContact() : valFiltre;
 
     if (!amis || amis.length < 1) {
         listeMessages.innerHTML = "pas de contact disponible !";
         return;
     }
-
+    listeMessages.innerHTML = "";
     amis.forEach((element, key) => {
         const div = document.createElement("div");
         div.innerHTML = component.message(element, key);
 
-        listeMessages.prepend(div);
+        listeMessages.appendChild(div);
         const pp = document.querySelector(`#pp${key}`);
 
         const span = document.createElement("span");
@@ -178,7 +173,6 @@ const allMessages = function() {
 
     });
 }
-
 const allArchive = function() {
     listeMessages.innerHTML = component.listeMessage();
     const amis = models.listerArchive();

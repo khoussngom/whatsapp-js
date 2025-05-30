@@ -72,6 +72,12 @@ export const component = (() => ({
                     <div id="PasserAdm" class=" hidden flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
                         <div class="admin text-[14px] text-green-600">Mettre Admin</div>
                     </div>
+
+
+                    <div id="retirer" class=" flex flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
+                        <div class="admin text-[14px] text-red-600">Retirer</div>
+                    </div>
+                    
                 </div>`
         return mes;
     },

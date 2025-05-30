@@ -173,11 +173,31 @@ const addMembre = function(groupe) {
 }
 
 
+const changerRole = function(membre, groupe, role, ac) {
+    role.classList.remove("hidden");
+    role.classList.add("flex");
+    role.addEventListener("click", () => {
+        membre.role = ac;
+        setTimeout(() => {
+            listeAttrMembre(groupe);
+        }, 300);
+    });
+}
+
+const supprimerMembre = function(groupes, groupe, membre) {
+    const del = document.querySelector("#retirer");
+    del.addEventListener("click", () => {
+        groupe.pop(membre);
+        setTimeout(() => {
+            listeAttrMembre(groupes)
+        }, 300);
+    })
+
+}
+
 const listeAttrMembre = function(groupe) {
     listeMessages.innerHTML = component.listeMessage();
-
     const amis = models.listerContact();
-    console.log("groupe:", groupe);
 
     amis.forEach((element, id) => {
         const membre = groupe.membres.find(mmbr => mmbr.nom === element.nom);
@@ -190,28 +210,12 @@ const listeAttrMembre = function(groupe) {
             const PasserAdm = div.querySelector("#PasserAdm");
 
             if (membre.role && membre.role.toLowerCase() === "admin") {
-                etat.classList.remove("hidden");
-                etat.classList.add("flex");
-                etat.addEventListener("click", () => {
-                    membre.role = "";
-                    console.log(`${membre.nom} n'est plus admin`);
-
-                    setTimeout(() => {
-                        listeAttrMembre(groupe);
-                    }, 300);
-                });
+                changerRole(membre, groupe, etat, "")
             } else {
-                PasserAdm.classList.remove("hidden");
-                PasserAdm.classList.add("flex");
-                PasserAdm.addEventListener("click", () => {
-                    membre.role = "admin";
-                    console.log(`${membre.nom} est maintenant admin`);
-
-
-                    setTimeout(() => {
-                        listeAttrMembre(groupe);
-                    }, 300);
-                });
+                changerRole(membre, groupe, PasserAdm, "admin")
+            }
+            if (Object.keys(groupe.membres).length > 1) {
+                supprimerMembre(groupe, groupe.membres, element);
             }
 
             div.addEventListener("click", () => {
