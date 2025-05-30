@@ -232,7 +232,7 @@ const afficherMessage = function(newContact) {
     const messageSt = models.ajoutContact(newContact);
     const messageStatut = document.createElement("small");
     messageStatut.innerHTML = messageSt;
-    listeMessages.prepend(messageStatut);
+    listeMessagyes.prepend(messageStatut);
 
     nomComplet.value = "";
     numeroTelephone.value = "";
@@ -265,10 +265,13 @@ const handleLogin = (e) => {
     const username = document.querySelector("#username").value;
     const password = document.querySelector("#password").value;
 
-
     if (username && password) {
 
         loginPopup.classList.add('hidden');
+
+        sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('username', username);
+
     }
 };
 
@@ -280,6 +283,18 @@ const checkLogin = () => {
     }
 };
 
+const logoutBtn = document.querySelector("#logoutBtn");
+
+const handleLogout = () => {
+
+    sessionStorage.removeItem('isLoggedIn');
+    sessionStorage.removeItem('username');
+    loginPopup.classList.remove('hidden');
+
+
+};
+
+logoutBtn.addEventListener('click', handleLogout);
 
 loginForm.addEventListener('submit', handleLogin);
 
