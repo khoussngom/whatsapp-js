@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 #loginPopup {
-    background: linear-gradient(165deg, #ff8725, #ff9900);
+    background: linear-gradient(165deg, #f0f0e8, #b9b9b9);
 }
 
 input::placeholder {
