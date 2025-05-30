@@ -54,6 +54,28 @@ export const component = (() => ({
         return mes;
     },
 
+    mmbrDuGroupe: (amis, id) => {
+        const mes = ` <div id="mes" class="flex flex-row w-[500px] h-[60px] justify-between items-center">
+
+                    <div id="info" class="flex flex-row  items-center w-9/12 h-full">
+                        <div id="pp${id}" class="flex flex-row  rounded-full bg-gray-700 w-[40px] h-[40px] mr-3 ml-2"></div>
+                        <div id="amis" class="flex flex-col justify-center items-start ">
+                            <div class="text-xl">${amis.nom}</div>
+                            <div class="text-xs/[14px]">${amis.numero}</div>
+                        </div>
+                    </div>
+
+                    <div id="etat" class=" hidden flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
+                        <div class="admin text-[14px] text-green-600">Admin</div>
+                    </div>
+
+                    <div id="PasserAdm" class=" hidden flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
+                        <div class="admin text-[14px] text-green-600">Mettre Admin</div>
+                    </div>
+                </div>`
+        return mes;
+    },
+
     listeDiffusion: (ami, id) => {
         const dateTime = new Date();
         return `<div id="listMessage" class="flex flex-1 flex-col gap-3 w-[150px] justify-start items-start">
