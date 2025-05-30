@@ -19,6 +19,8 @@ export const expedition = document.querySelector("#expediteur");
 export const reception = document.querySelector("#recepteur");
 const zoneMessage = document.querySelector("#zoneMessage");
 const recherche = document.querySelector("#recherche")
+const loginPopup = document.querySelector("#loginPopup");
+const loginForm = document.querySelector("#loginForm");
 
 diff();
 
@@ -256,3 +258,30 @@ listeGroupe.addEventListener("click", afficherListeGroupe)
 Archive.addEventListener("click", allArchive)
 
 btEnvoie.addEventListener("click", handleMessage);
+
+
+const handleLogin = (e) => {
+    e.preventDefault();
+    const username = document.querySelector("#username").value;
+    const password = document.querySelector("#password").value;
+
+
+    if (username && password) {
+
+        loginPopup.classList.add('hidden');
+    }
+};
+
+
+const checkLogin = () => {
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+    if (isLoggedIn) {
+        loginPopup.classList.add('hidden');
+    }
+};
+
+
+loginForm.addEventListener('submit', handleLogin);
+
+
+document.addEventListener('DOMContentLoaded', checkLogin);
