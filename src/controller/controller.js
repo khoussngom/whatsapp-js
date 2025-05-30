@@ -232,7 +232,7 @@ const afficherMessage = function(newContact) {
     const messageSt = models.ajoutContact(newContact);
     const messageStatut = document.createElement("small");
     messageStatut.innerHTML = messageSt;
-    listeMessagyes.prepend(messageStatut);
+    listeMessages.prepend(messageStatut);
 
     nomComplet.value = "";
     numeroTelephone.value = "";
