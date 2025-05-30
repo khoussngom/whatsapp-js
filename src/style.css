@@ -1,7 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+#loginPopup {
+    background: linear-gradient(165deg, #ff8725, #ff9900);
+}
+
+input::placeholder {
+    color: #9ca3af;
+}
+
+input {
+    transition: all 0.3s ease;
+}
+
+.text-6xl {
+    font-size: 3.75rem;
+    line-height: 1;
+}
+
 .selectionner {
     background-color: gray;
     opacity: 0.8;
 }
+
+
+/* .login-input-transition {
+    @apply transition-all duration-200 ease-in-out;
+}
+
+.login-button-hover {
+    @apply transform hover: scale-[1.02] transition-transform duration-200;
+} */
