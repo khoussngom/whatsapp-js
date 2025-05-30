@@ -35,22 +35,23 @@ export const component = (() => ({
 
     message: (amis, id) => {
         const dateTime = new Date();
-        const mes = ` <div id="mes" class="flex flex-row w-[500px] h-[60px] justify-between items-center">
-
-                    <div id="info" class="flex flex-row  items-center w-9/12 h-full">
-                        <div id="pp${id}" class="flex flex-row  rounded-full bg-gray-700 w-[40px] h-[40px] mr-3 ml-2"></div>
-                        <div id="amis" class="flex flex-col justify-center items-start ">
-                            <div class="text-xl">${amis.nom}</div>
-                            <div class="text-xs/[14px]">${amis.numero}</div>
-                        </div>
+        const mes = ` 
+        <div id="mes-${amis.numero}" class="flex flex-row w-[500px] h-[60px] justify-between items-center">
+            <div id="info" class="flex flex-row  items-center w-9/12 h-full">
+                <div id="pp${id}" class="flex flex-row  rounded-full bg-gray-700 w-[40px] h-[40px] mr-3 ml-2"></div>
+                <div id="amis" class="flex flex-col justify-center items-start ">
+                    <div class="text-xl">${amis.nom}</div>
+                    <div class="flex flex-row items-center">
+                        <div class="text-xs/[14px]">${amis.numero}</div>
                     </div>
+                </div>
+            </div>
 
-                    <div id="etat" class="flex flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
-                        <div class="rounded-full w-[4px] h-[4px] bg-green-600"></div>
-                        <div class="text-[12px] text-green-600">${dateTime.toLocaleDateString()}</div>
-
-                    </div>
-                </div>`
+            <div id="etat" class="flex flex-col justify-between items-center w-3/12 h-full py-4 pt-4">
+                <div class="rounded-full w-[4px] h-[4px] bg-green-600"></div>
+                <div class="text-[12px] text-green-600">${dateTime.toLocaleDateString()}</div>
+            </div>
+        </div>`;
         return mes;
     },
 

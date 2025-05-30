@@ -22,6 +22,8 @@ const recherche = document.querySelector("#recherche")
 const loginPopup = document.querySelector("#loginPopup");
 const loginForm = document.querySelector("#loginForm");
 
+let brouillons = new Map();
+
 diff();
 
 const handleMessage = () => {
@@ -43,6 +45,12 @@ const handleMessage = () => {
 
             const span = EnvoyerMessage(message);
             voirMessage(span, contactActif);
+
+            if (brouillons.has(contactActif.numero)) {
+                brouillons.delete(contactActif.numero);
+                const brouillonIndicator = document.querySelector(`#brouillon-${contactActif.numero}`);
+                brouillonIndicatorremove();
+            }
         }
     }
 };
@@ -93,7 +101,24 @@ export const voirMessage = function(span, element) {
 let contactActif = null;
 
 export const afficherContact = function(element) {
+    const oldText = textMessage.value.trim();
+
+    if (contactActif && oldText !== '') {
+        brouillons.set(contactActif.numero, oldText);
+
+        const brouillonIndicator = document.querySelector(`#brouillon-${contactActif.numero}`);
+        if (!brouillonIndicator) {
+            const div = document.createElement("small");
+            div.id = `brouillon-${contactActif.numero}`;
+            div.className = "text-gray-500 italic ml-2";
+            div.textContent = "Brouillon";
+            document.querySelector(`#mes-${contactActif.numero}`).appendChild(div);
+        }
+    }
+
     contactActif = element;
+
+    textMessage.value = brouillons.get(element.numero) || '';
 
     nomActive.innerHTML = element.nom;
     profil.innerHTML = "";
@@ -300,3 +325,27 @@ loginForm.addEventListener('submit', handleLogin);
 
 
 document.addEventListener('DOMContentLoaded', checkLogin);
+
+textMessage.addEventListener('input', () => {
+    if (contactActif && textMessage.value.trim() !== '') {
+        brouillons.set(contactActif.numero, textMessage.value);
+    }
+});
+
+messages.addEventListener('click', () => {
+    if (contactActif && textMessage.value.trim() !== '') {
+        brouillons.set(contactActif.numero, textMessage.value);
+    }
+});
+
+listeGroupe.addEventListener('click', () => {
+    if (contactActif && textMessage.value.trim() !== '') {
+        brouillons.set(contactActif.numero, textMessage.value);
+    }
+});
+
+diffusions.addEventListener('click', () => {
+    if (contactActif && textMessage.value.trim() !== '') {
+        brouillons.set(contactActif.numero, textMessage.value);
+    }
+});
