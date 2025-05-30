@@ -79,11 +79,48 @@ export const recupererMessage = function() {
 }
 
 export const EnvoyerMessage = function(messSend) {
-    const span = document.createElement("span");
-    span.className = `flex flex-row justify-end items-end  w-max  rounded-xl rounded-l-xl  m-3 p-3 h-min text-white bg-green-600`;
-    span.textContent = messSend;
-    return span
+    const now = new Date();
+    const heure = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
 
+    const messageContainer = document.createElement("div");
+    messageContainer.innerHTML = component.messageEnvoyer();
+
+    const messageSpan = messageContainer.querySelector("#messageEnvoyer");
+    messageSpan.textContent = messSend;
+
+    const statusIcon = messageContainer.querySelector("#messageStatus");
+    const timeSpan = messageContainer.querySelector(".text-gray-500");
+    timeSpan.textContent = `${heure}:${minutes}`;
+
+    let currentStatus = 1;
+    const updateStatus = (currentStatus) => {
+        switch (currentStatus) {
+            case 1:
+                statusIcon.innerHTML = '<i class="bx bx-check text-gray-400"></i>';
+                break;
+            case 2:
+                statusIcon.innerHTML = '<i class="bx bx-check-double text-gray-400"></i>';
+                break;
+            case 3:
+                statusIcon.innerHTML = '<i class="bx bx-check-double text-[#53bdeb]"></i>';
+                break;
+        }
+    };
+
+    updateStatus();
+
+    setTimeout(() => {
+        currentStatus = 2;
+        updateStatus(currentStatus);
+
+        setTimeout(() => {
+            currentStatus = 3;
+            updateStatus(currentStatus);
+        }, 2000);
+    }, 1000);
+
+    return messageContainer;
 }
 
 export const voirMessage = function(span, element) {

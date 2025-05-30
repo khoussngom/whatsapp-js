@@ -27,10 +27,23 @@ export const component = (() => ({
     },
 
     messageEnvoyer: () => {
-        const message = `<div id="expediteur" class="flex flex-row justify-end items-end w-[98%] h-max ">
-                            <span id="messageEnvoyer" class=" flex flex-row justify-end items-end  w-max  rounded-xl rounded-l-xl  m-3 p-3 h-min text-white bg-green-600 "></span>
-                        </div>`
-        return message
+        const now = new Date();
+        const heure = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+
+        const message = `
+            <div class="flex flex-col items-end">
+                <div class="flex flex-row items-end gap-2">
+                    <span id="messageEnvoyer" class="flex flex-row justify-end items-end w-max rounded-xl rounded-l-xl m-3 p-3 h-min text-white bg-green-600"></span>
+                </div>
+                <div class="flex flex-row items-center gap-1 mr-4 -mt-2">
+                    <span class="text-[11px] text-gray-500">${heure}:${minutes}</span>
+                    <span id="messageStatus" class="text-[16px]">
+                        <i class="bx bx-check text-gray-400"></i>
+                    </span>
+                </div>
+            </div>`;
+        return message;
     },
 
     message: (amis, id) => {
