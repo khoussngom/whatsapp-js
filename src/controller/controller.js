@@ -172,6 +172,8 @@ export const afficherContact = function(element) {
     profil.appendChild(span);
 };
 
+
+
 const colorierElemnt = function(div, element) {
 
     div.addEventListener("click", () => {
@@ -179,7 +181,6 @@ const colorierElemnt = function(div, element) {
 
         document.querySelectorAll(".selectionner").forEach(el => {
             el.classList.remove("selectionner");
-
         });
 
         div.classList.add("selectionner");
@@ -237,6 +238,9 @@ const allMessages = function() {
 
     });
 }
+
+
+
 const allArchive = function() {
     listeMessages.innerHTML = component.listeMessage();
     const amis = models.listerArchive();
@@ -258,6 +262,8 @@ const allArchive = function() {
 
     });
 }
+
+
 
 const afficherAllContact = function() {
     const allContact = models.listerContact();
@@ -291,6 +297,13 @@ export function afficherMessageError(messageTexte) {
 }
 
 const afficherMessage = function(newContact) {
+    const allContact = models.listerContact();
+    allContact.forEach(el => {
+        if (el.nom === newContact.nom) {
+            newContact.nom = newContact.nom + ' 1'
+
+        }
+    })
     const messageSt = models.ajoutContact(newContact);
     const messageStatut = document.createElement("small");
     messageStatut.innerHTML = messageSt;
