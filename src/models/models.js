@@ -32,7 +32,7 @@ export const models = (() => ({
     },
 
     listeMembre(nom) {
-        const groupeTrouve = groupe.find(element => element.nom === nom);
+        const groupeTrouve = groupe.find(element => element.nom === nom.nom);
         return groupeTrouve ? groupeTrouve.membres || [] : [];
     },
 

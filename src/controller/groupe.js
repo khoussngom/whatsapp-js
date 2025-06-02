@@ -2,7 +2,7 @@ import { component } from "../component/component.js";
 import { services } from "../services/service.js";
 import { models } from "../models/models.js";
 import { diff, isDiffusionMode, Allcheck } from "./message.js";
-import { afficherContact, enteteDiscu, reception, expedition, profil, afficherMessageError, afficherMessageSucces, listeMessages, listeGroupe, btEnvoie, recupererMessage, EnvoyerMessage, voirMessage } from "./controller.js";
+import { nomActive, afficherContact, enteteDiscu, reception, expedition, profil, afficherMessageError, afficherMessageSucces, listeMessages, listeGroupe, btEnvoie, recupererMessage, EnvoyerMessage, voirMessage } from "./controller.js";
 
 let contactActif = null;
 
@@ -13,34 +13,52 @@ const creer_listMembre = function(membresStr, element) {
 
     nomActive.innerHTML = element.nom;
 
+
     enteteDiscu.appendChild(listMember);
 }
+
+
+
 const afficherMembre = function(element) {
-    const allMembers = models.listeMembre(element);
-    console.log("Membres récupérés :", allMembers);
+    if (!element || !element.nom) {
+        return;
+    }
 
     contactActif = element;
 
-    nomActive.innerHTML = element.nom;
     profil.innerHTML = "";
     expedition.innerHTML = "";
     reception.innerHTML = "";
 
-    if (element.messages) {
-        element.messages.forEach(message => expedition.appendChild(message));
+    if (Array.isArray(element.messages)) {
+        element.messages.forEach(message => {
+            const messageClone = message.cloneNode(true);
+            expedition.appendChild(messageClone);
+        });
     }
 
-    if (Array.isArray(allMembers) && allMembers.length > 0) {
-        const membresStr = allMembers.map(m => m.nom).join(", ");
+    const allMembers = models.listeMembre(element);
 
+    if (Array.isArray(allMembers) && allMembers.length > 0) {
         const ancienDiv = document.querySelector(".list-member");
         if (ancienDiv) {
             ancienDiv.remove();
         }
 
-        creer_listMembre(membresStr, element);
+        const membresStr = allMembers
+            .map(m => m.nom)
+            .filter(Boolean)
+            .join(", ");
+
+        if (membresStr) {
+            creer_listMembre(membresStr, element);
+        }
     } else {
         console.warn(`Aucun membre trouvé pour le groupe ${element.nom}`);
+        const messageVide = document.createElement("small");
+        messageVide.textContent = "Aucun membre dans ce groupe";
+        messageVide.className = "text-gray-500 text-sm";
+        enteteDiscu.appendChild(messageVide);
     }
 };
 
@@ -245,7 +263,6 @@ const afMemb = function(groupe) {
 
             contactActif = element;
 
-            nomActive.innerHTML = element.membres.map(m => m.nom).join(", ");
             profil.innerHTML = "";
             expedition.innerHTML = "";
             reception.innerHTML = "";
