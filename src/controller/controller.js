@@ -306,12 +306,7 @@ const afficherMessage = function(newContact) {
         newContact.nom = `${newContact.nom} ${incrementer}`;
         existe = allContact.some(el => el.nom === newContact.nom);
     };
-    // allContact.forEach(el => {
-    //     if (el.nom === newContact.nom) {
-    //         newContact.nom = newContact.nom + ' 1'
 
-    //     }
-    // })
     const messageSt = models.ajoutContact(newContact);
     const messageStatut = document.createElement("small");
     messageStatut.innerHTML = messageSt;
