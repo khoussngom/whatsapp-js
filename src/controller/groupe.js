@@ -66,21 +66,15 @@ const afficherMembre = function(element) {
 let groupe = [];
 
 const user_to_tab = function(membres) {
-    const mem = [
-        { nom: "khouss", role: "admin" },
-        ...membres
+    return membres
         .split(",")
         .map(m => m.trim())
-        .filter(m => m !== "" && m !== "khouss")
+        .filter(m => m !== "")
         .map(m => ({
             nom: m,
             role: ""
-        }))
-    ];
-
-    return mem;
+        }));
 };
-
 
 const verifier_numero_inContact = function(listeContact, mem) {
     for (let el of mem) {
@@ -94,20 +88,31 @@ const verifier_numero_inContact = function(listeContact, mem) {
 
 function recupererDonneesGroupe() {
     const listeContact = models.listerContact();
-    listeContact.push({ nom: "khouss", numero: "774730039" })
     const nom = document.querySelector("#nomGroupe").value.trim();
     const membres = document.querySelector("#membresGroupe").value.trim();
 
-    const mem = user_to_tab(membres)
+    // Traiter d'abord les membres sans khouss
+    const mem = user_to_tab(membres);
 
-    if (mem.length < 2) {
-        afficherMessageError("Le groupe doit contenir au moins 2 personnes.");
+    // Vérifier la longueur minimale (sans compter khouss)
+    if (mem.length < 1) {
+        afficherMessageError("Le groupe doit contenir au moins 2 personnes (vous inclus).");
         return;
     }
 
+    // Vérifier si tous les membres existent dans les contacts
     if (verifier_numero_inContact(listeContact, mem)) return;
 
-    return { nom, membres: mem };
+    // Si tout est valide, ajouter khouss comme admin
+    const membresAvecAdmin = [
+        { nom: "khouss", role: "admin" },
+        ...mem
+    ];
+
+    return {
+        nom,
+        membres: membresAvecAdmin
+    };
 }
 
 
