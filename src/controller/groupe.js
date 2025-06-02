@@ -91,19 +91,15 @@ function recupererDonneesGroupe() {
     const nom = document.querySelector("#nomGroupe").value.trim();
     const membres = document.querySelector("#membresGroupe").value.trim();
 
-    // Traiter d'abord les membres sans khouss
     const mem = user_to_tab(membres);
 
-    // Vérifier la longueur minimale (sans compter khouss)
     if (mem.length < 1) {
         afficherMessageError("Le groupe doit contenir au moins 2 personnes (vous inclus).");
         return;
     }
 
-    // Vérifier si tous les membres existent dans les contacts
     if (verifier_numero_inContact(listeContact, mem)) return;
 
-    // Si tout est valide, ajouter khouss comme admin
     const membresAvecAdmin = [
         { nom: "khouss", role: "admin" },
         ...mem
