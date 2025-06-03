@@ -245,24 +245,59 @@ const allArchive = function() {
     listeMessages.innerHTML = component.listeMessage();
     const amis = models.listerArchive();
 
+    if (!amis || amis.length === 0) {
+        listeMessages.innerHTML = "Aucun contact archivé";
+        return;
+    }
+
     amis.forEach((element, id) => {
         const div = document.createElement("div");
         div.innerHTML = component.message(element, id);
-        listeMessages.prepend(div);
-        const etat = document.querySelector("#etat");
-        etat.innerHTML = "<i class='bx  bxs-archive-arrow-up'  style='color:#000000'></i>";
-        etat.addEventListener("click", () => {
-            models.desarchiverContact(element.nom, amis);
-            allMessages()
-        });
-        div.addEventListener("click", () => {
-            afficherContact(element)
-        });
-        btnArchive.addEventListener("click", () => { models.archiverContact(element.nom, amis) });
 
+        const pp = div.querySelector(`#pp${id}`);
+        const span = document.createElement("span");
+        span.classList.add("flex", "flex-row", "rounded-full", "w-[40px]", "h-[40px]", "justify-center", "items-center");
+        span.innerHTML = `<span class="flex flex-row justify-center items-center text-center text-[30px] text-white w-full h-full">${element.nom.charAt(0).toUpperCase()}</span>`;
+        pp.appendChild(span);
+
+        const etatDiv = div.querySelector("#etat");
+        etatDiv.innerHTML = `
+            <div class="cursor-pointer text-green-600 hover:text-green-800 flex flex-row items-center gap-1">
+                <i class='bx bx-upload' style='color:#000000; font-size: 20px;'></i>
+                <small>Désarchiver</small>
+            </div>
+        `;
+
+        etatDiv.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (models.desarchiverContact(element.nom)) {
+                div.remove();
+                if (amis.length === 1) {
+                    listeMessages.innerHTML = "Aucun contact archivé";
+                }
+                allMessages();
+            }
+        });
+
+        div.addEventListener("click", () => {
+            afficherContact(element);
+        });
+
+        listeMessages.prepend(div);
     });
 }
 
+if (btnArchive) {
+    btnArchive.addEventListener("click", () => {
+        if (contactActif) {
+            const contacts = models.listerContact();
+            if (models.archiverContact(contactActif.nom, contacts)) {
+                allMessages();
+                afficherMessageSucces("Contact archivé avec succès");
+            }
+        }
+    });
+}
 
 
 const afficherAllContact = function() {

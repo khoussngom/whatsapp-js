@@ -36,24 +36,28 @@ export const models = (() => ({
         return groupeTrouve ? groupeTrouve.membres || [] : [];
     },
 
-    archiverContact(nom, groupe) {
-        const contactTrouve = groupe.find(element => element.nom === nom);
-        groupe = groupe.pop(contactTrouve);
-        archiveContact = [contactTrouve, ...archiveContact];
-
-        return archiveContact;
+    archiverContact(nom, contacts) {
+        const index = contacts.findIndex(contact => contact.nom === nom);
+        if (index !== -1) {
+            const contactArchive = contacts.splice(index, 1)[0];
+            archiveContact.push(contactArchive);
+            return true;
+        }
+        return false;
     },
 
     listerArchive() {
         return archiveContact
     },
 
-    desarchiverContact(nom, archiveContact) {
-        const contactTrouve = archiveContact.find(element => element.nom === nom);
-        archiveContact = archiveContact.pop(contactTrouve);
-        contact = [contactTrouve, ...contact];
-        console.log(contact)
-        return contact;
+    desarchiverContact(nom) {
+        const index = archiveContact.findIndex(c => c.nom === nom);
+        if (index !== -1) {
+            const contactDesarchive = archiveContact.splice(index, 1)[0];
+            contact.push(contactDesarchive);
+            return true;
+        }
+        return false;
     },
 
     rechercherContact(contactList, cle) {
